@@ -4,7 +4,7 @@ import path from "node:path";
 const CONFIG_TEMPLATE = `module.exports = {
   agent: async (prompt) => {
     // Mock agent - replace with a real agent call when you're ready.
-    if (/hello/i.test(prompt)) return "Hello there!";
+    if (/hello/i.test(prompt)) return "hello there!";
     if (/2\\s*\\+\\s*2/.test(prompt)) return "4";
     return "I don't know.";
   },
