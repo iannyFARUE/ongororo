@@ -28,21 +28,19 @@ program
   .command("run [path]")
   .description("Run the cases in an ongororo config file")
   .action(async (configPath: string = "./ongororo.config.js") => {
-    let config;
     try {
-      config = loadConfig(configPath);
+      const config = loadConfig(configPath);
+      const summary = await runCases(config);
+      for (const result of summary.results) {
+        console.log(result.passed ? pc.green(`✓ ${result.name}`) : pc.red(`✗ ${result.name}`));
+      }
+      console.log(`\n${summary.passed} passed, ${summary.failed} failed`);
+      process.exitCode = summary.failed > 0 ? 1 : 0;
     } catch (err) {
       console.error((err as Error).message);
       process.exitCode = 1;
       return;
     }
-
-    const summary = await runCases(config);
-    for (const result of summary.results) {
-      console.log(result.passed ? pc.green(`✓ ${result.name}`) : pc.red(`✗ ${result.name}`));
-    }
-    console.log(`\n${summary.passed} passed, ${summary.failed} failed`);
-    process.exitCode = summary.failed > 0 ? 1 : 0;
   });
 
 program.parse();
